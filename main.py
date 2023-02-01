@@ -14,14 +14,15 @@ async def root():
     return "THERE IS A MY STOCK MICROSERVICE"
 
 
-@app.get("/wholesale/{start_date}/{end_date}/{sklad}")
-async def get_wholesale(start_date: str, end_date: str, sklad: str, api_key: APIKey = Depends(auth.get_api_key)):
-    wholesale = await wrapper.get_all_sales_wholesale(start_date, end_date, sklad)
+@app.get("/tag/{agent_tag}/{start_date}/{end_date}/{sklad}")
+async def get_sale_tag(agent_tag: str, start_date: str, end_date: str, sklad: str,
+                       api_key: APIKey = Depends(auth.get_api_key)):
+    sales_tag = await wrapper.get_all_sales_tag(agent_tag, start_date, end_date, sklad)
     all_sum = 0
-    print(wholesale)
-    for i in wholesale["rows"]:
+    print(sales_tag)
+    for i in sales_tag["rows"]:
         print(i)
-        all_sum += int(i["sellSum"])/100
+        all_sum += int(i["sellSum"]) / 100
     return {"sum": all_sum}
 
 
@@ -32,9 +33,8 @@ async def get_all(start_date: str, end_date: str, sklad: str, api_key: APIKey = 
     all_sum = 0
     for i in all_["rows"]:
         print(i)
-        all_sum += int(i["sellSum"])/100
+        all_sum += int(i["sellSum"]) / 100
     return {"sum": all_sum}
-
 
 # @app.get("/all_month/{year}/{month}/{sklad}")
 # async def get_all_month(year: int, month: int, sklad: str, api_key: APIKey = Depends(auth.get_api_key)):
