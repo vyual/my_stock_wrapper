@@ -26,7 +26,7 @@ class MyStockWrapper:
 
     async def get_all_sales_wholesale(self, start_date, end_date, sklad):
         async with aiohttp.ClientSession() as session:
-            url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?filter=agentTag=оптовики&momentFrom={start_date} 00:00:00&momentTo={end_date} 00:00:01&interval=day&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}"
+            url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?filter=agentTag=оптовики&momentFrom={start_date} 00:00:01&momentTo={end_date} 00:00:01&interval=day&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}"
             async with session.get(url, auth=self.basic) as resp:
                 returned = await resp.json()
 
