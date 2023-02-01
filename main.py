@@ -20,8 +20,9 @@ async def get_wholesale(start_date: str, end_date: str, sklad: str, api_key: API
     all_sum = 0
     print(wholesale)
     for i in wholesale["rows"]:
-        all_sum += int(i["sellSum"])
-    return {"sum": all_sum/100}
+        print(i)
+        all_sum += int(i["sellSum"])/100
+    return {"sum": all_sum}
 
 
 @app.get("/all/{start_date}/{end_date}/{sklad}")
@@ -29,9 +30,10 @@ async def get_all(start_date: str, end_date: str, sklad: str, api_key: APIKey = 
     all_ = await wrapper.get_all_sales(start_date, end_date, sklad)
     print(all_)
     all_sum = 0
-    for i in all_["series"]:
-        all_sum += int(i["sum"])
-    return {"sum": all_sum/100}
+    for i in all_["rows"]:
+        print(i)
+        all_sum += int(i["sellSum"])/100
+    return {"sum": all_sum}
 
 
 # @app.get("/all_month/{year}/{month}/{sklad}")
