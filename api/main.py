@@ -16,35 +16,35 @@ class MyStockWrapper:
 
         return returned
 
-    async def get_all_sales(self, year, sklad):
+    async def get_all_sales(self, start_date, end_date, sklad):
         async with aiohttp.ClientSession() as session:
-            url = f"https://online.moysklad.ru/api/remap/1.2/report/sales/plotseries?momentFrom={year}-01-01 00:00:00&momentTo={year + 1}-01-01 00:00:01&interval=month&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}/"
+            url = f"https://online.moysklad.ru/api/remap/1.2/report/sales/plotseries?momentFrom={start_date} 00:00:00&momentTo={end_date} 00:00:01&interval=day&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}/"
             async with session.get(url, auth=self.basic) as resp:
                 returned = await resp.json()
 
         return returned
 
-    async def get_all_sales_wholesale(self, year, sklad):
+    async def get_all_sales_wholesale(self, start_date, end_date, sklad):
         async with aiohttp.ClientSession() as session:
-            url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?filter=agentTag=оптовики&momentFrom={year}-01-01%2000:00:00&momentTo={year + 1}-01-01%2000:00:01&interval=year&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}"
+            url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?filter=agentTag=оптовики&momentFrom={start_date} 00:00:0&momentTo={end_date} 00:00:01&interval=day&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}"
             async with session.get(url, auth=self.basic) as resp:
                 returned = await resp.json()
 
         return returned
 
-    async def get_all_sales_month(self, year, month, sklad):
-        async with aiohttp.ClientSession() as session:
-            url = f"https://online.moysklad.ru/api/remap/1.2/report/sales/plotseries?momentFrom={year}-{month}-01 00:00:00&momentTo={year}-{month + 1}-01 00:00:01&interval=month&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}/"
-            async with session.get(url, auth=self.basic) as resp:
-                returned = await resp.json()
-
-        return returned
-
-
-    async def get_all_sales_wholesale_month(self, year, month, sklad):
-        async with aiohttp.ClientSession() as session:
-            url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?filter=agentTag=оптовики&momentFrom={year}-{month}-01%2000:00:00&momentTo={year}-{month + 1}-01%2000:00:01&interval=month&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}"
-            async with session.get(url, auth=self.basic) as resp:
-                returned = await resp.json()
-
-        return returned
+    # async def get_all_sales_month(self, year, month, sklad):
+    #     async with aiohttp.ClientSession() as session:
+    #         url = f"https://online.moysklad.ru/api/remap/1.2/report/sales/plotseries?momentFrom={year}-{month}-01 00:00:00&momentTo={year}-{month + 1}-01 00:00:01&interval=month&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}/"
+    #         async with session.get(url, auth=self.basic) as resp:
+    #             returned = await resp.json()
+    #
+    #     return returned
+    #
+    #
+    # async def get_all_sales_wholesale_month(self, year, month, sklad):
+    #     async with aiohttp.ClientSession() as session:
+    #         url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?filter=agentTag=оптовики&momentFrom={year}-{month}-01%2000:00:00&momentTo={year}-{month + 1}-01%2000:00:01&interval=month&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}"
+    #         async with session.get(url, auth=self.basic) as resp:
+    #             returned = await resp.json()
+    #
+    #     return returned
