@@ -1,6 +1,6 @@
 import aiohttp as aiohttp
 from aiohttp import BasicAuth
-from datetime import datetime
+from datetime import datetime, date
 
 
 class MyStockWrapper:
@@ -38,6 +38,20 @@ class MyStockWrapper:
         datetime.today().strftime('%Y-%m-%d')
         async with aiohttp.ClientSession() as session:
             url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?momentFrom={datetime.today().strftime('%Y-%m-%d')} 00:00:00&momentTo={datetime.today().strftime('%Y-%m-%d')} 23:59:58&interval=day&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}/"
+            async with session.get(url, auth=self.basic) as resp:
+                returned = await resp.json()
+
+        return returned
+
+    async def get_all_sales_month(self, sklad):
+        month = date.today().month
+        year = date.today().year
+        if month < 10:
+            month = int(f"0{month}")
+        start_date = str(year) + '-' + str(month) + '-01'
+        end_date = str(year) + '-' + str(month + 1) + '-01'
+        async with aiohttp.ClientSession() as session:
+            url = f"https://online.moysklad.ru/api/remap/1.2/report/profit/byemployee?momentFrom={start_date} 00:00:00&momentTo={end_date} 00:00:01&interval=day&filter=store=https://online.moysklad.ru/api/remap/1.2/entity/store/{sklad}/"
             async with session.get(url, auth=self.basic) as resp:
                 returned = await resp.json()
 
