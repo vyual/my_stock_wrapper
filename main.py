@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.openapi.models import APIKey
 from fastapi.security import OAuth2PasswordBearer
 
+from data.stocks import stocks_ids
 from loader import wrapper
 from middlewares import auth
 
@@ -36,16 +37,23 @@ async def get_all(start_date: str, end_date: str, sklad: str, api_key: APIKey = 
         all_sum += int(i["sellSum"]) / 100
     return {"sum": all_sum}
 
-# @app.get("/all_month/{year}/{month}/{sklad}")
-# async def get_all_month(year: int, month: int, sklad: str, api_key: APIKey = Depends(auth.get_api_key)):
-#     all_ = await wrapper.get_all_sales_month(year, month, sklad)
-#     all_sum = 0
-#     for i in all_["series"]:
-#         all_sum += int(i["sum"])
-#     return {"sum": all_sum/100}
-#
-#
-# @app.get("/wholesale_month/{year}/{month}/{sklad}")
-# async def get_wholesale_month(year: int, month: int, sklad: str, api_key: APIKey = Depends(auth.get_api_key)):
-#     wholesale = await wrapper.get_all_sales_wholesale_month(year, month, sklad)
-#     return {"sum": int(wholesale["rows"][0]["sellSum"])/100}
+
+@app.get("/today/stocks")
+async def get_today_dashboard_stocks(api_key: APIKey = Depends(auth.get_api_key)):
+    resp_json = {}
+    all_sum = 0
+    profit_sum = 0
+    for i in stocks_ids:
+        print(i[1])
+        today = await wrapper.get_all_sales_today(sklad=i[1])
+        print(today)
+        for x in today["rows"]:
+            print(x)
+            all_sum += int(x["sellSum"]) / 100
+            profit_sum += int(x["profit"]) / 100
+        resp_json[i[0]] = {"ПРОДАЖИ": all_sum,
+                                  "ПРИБЫЛЬНОСТЬ": profit_sum}
+        all_sum = 0
+        profit_sum = 0
+    return {"resp": resp_json}
+
