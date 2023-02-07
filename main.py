@@ -76,3 +76,23 @@ async def get_month_dashboard_stocks(api_key: APIKey = Depends(auth.get_api_key)
         all_sum = 0
         profit_sum = 0
     return {"resp": resp_json}
+
+
+@app.get("/period/stocks/{start_date}/{end_date")
+async def get_period_dashboard_stocks(start_date: str, end_date: str, api_key: APIKey = Depends(auth.get_api_key)):
+    resp_json = {}
+    all_sum = 0
+    profit_sum = 0
+    for i in stocks_ids:
+        print(i[1])
+        today = await wrapper.get_all_sales_month(sklad=i[1])
+        print(today)
+        for x in today["rows"]:
+            print(x)
+            all_sum += int(x["sellSum"]) / 100
+            profit_sum += int(x["profit"]) / 100
+        resp_json[i[0]] = {"ПРОДАЖИ": all_sum,
+                           "ПРИБЫЛЬНОСТЬ": profit_sum}
+        all_sum = 0
+        profit_sum = 0
+    return {"resp": resp_json}
