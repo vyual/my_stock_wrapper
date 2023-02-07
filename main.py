@@ -85,8 +85,7 @@ async def get_period_dashboard_stocks(start_date: str, end_date: str, api_key: A
     profit_sum = 0
     for i in stocks_ids:
         print(i[1])
-        today = await wrapper.get_all_sales_month(sklad=i[1])
-        print(today)
+        today = await wrapper.get_all_sales_period(start_date, end_date)
         for x in today["rows"]:
             print(x)
             all_sum += int(x["sellSum"]) / 100
