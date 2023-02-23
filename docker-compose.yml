@@ -9,5 +9,5 @@ services:
     volumes:
       - .:/app
     ports:
-      - 8008:8000
+      - "8008:8000"
 

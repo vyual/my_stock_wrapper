@@ -1,4 +1,5 @@
 from api.main import MyStockWrapper
-from data.config import LOGIN_MS, PASSWORD_MS
+from data.config import load_config
 
-wrapper = MyStockWrapper(login=LOGIN_MS, password=PASSWORD_MS)
+config = load_config()
+wrapper = MyStockWrapper(login=config.misc.login_ms, password=config.misc.password_ms)
